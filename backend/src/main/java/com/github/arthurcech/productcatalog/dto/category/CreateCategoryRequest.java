@@ -1,5 +1,6 @@
 package com.github.arthurcech.productcatalog.dto.category;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.github.arthurcech.productcatalog.validation.category.CategoryInsertValid;
 
 import javax.validation.constraints.NotBlank;
@@ -13,14 +14,15 @@ public class CreateCategoryRequest implements Serializable {
 
     @NotBlank
     @Size(max = 255)
-    private String name;
+    private final String name;
+
+    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+    public CreateCategoryRequest(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
 }
