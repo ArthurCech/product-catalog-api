@@ -31,6 +31,7 @@ public class Product implements Serializable {
     private String name;
     private String description;
     private BigDecimal price;
+    @Column(name = "img_url")
     private String imgUrl;
     private Instant date;
 
@@ -96,12 +97,11 @@ public class Product implements Serializable {
     }
 
     public Set<Category> getCategories() {
-        return new HashSet<>(categories);
+        return Set.copyOf(categories);
     }
 
     public void addCategory(Category category) {
         this.categories.add(category);
-        category.addProduct(this);
     }
 
     @Override

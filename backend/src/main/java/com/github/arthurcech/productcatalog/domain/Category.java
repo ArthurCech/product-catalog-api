@@ -54,11 +54,7 @@ public class Category implements Serializable {
     }
 
     public Set<Product> getProducts() {
-        return new HashSet<>(products);
-    }
-
-    public void addProduct(Product product) {
-        this.products.add(product);
+        return Set.copyOf(products);
     }
 
     @Override
