@@ -54,7 +54,7 @@ public class Category implements Serializable {
     }
 
     public Set<Product> getProducts() {
-        return Set.copyOf(products);
+        return products;
     }
 
     @Override

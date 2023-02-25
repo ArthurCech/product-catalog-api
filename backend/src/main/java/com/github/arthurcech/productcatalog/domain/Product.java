@@ -97,7 +97,7 @@ public class Product implements Serializable {
     }
 
     public Set<Category> getCategories() {
-        return Set.copyOf(categories);
+        return categories;
     }
 
     public void addCategory(Category category) {

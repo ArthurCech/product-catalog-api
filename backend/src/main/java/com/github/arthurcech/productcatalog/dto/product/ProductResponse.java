@@ -65,7 +65,7 @@ public class ProductResponse implements Serializable {
     }
 
     public Set<CategoryResponse> getCategories() {
-        return Set.copyOf(categories);
+        return categories;
     }
 
 }

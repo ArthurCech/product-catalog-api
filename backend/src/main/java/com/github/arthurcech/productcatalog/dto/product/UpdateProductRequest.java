@@ -71,7 +71,7 @@ public class UpdateProductRequest implements Serializable {
     }
 
     public List<ProductCategoryRequest> getCategories() {
-        return List.copyOf(categories);
+        return categories;
     }
 
 }

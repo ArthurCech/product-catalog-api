@@ -67,6 +67,7 @@ public class ProductService {
             Product product = productRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
             ProductMapper.INSTANCE.updateProductFromDTO(updateProductRequest, product);
+            product.getCategories().clear();
             updateProductRequest.getCategories()
                     .forEach(category -> {
                         product.addCategory(categoryRepository.getOne(category.getId()));
