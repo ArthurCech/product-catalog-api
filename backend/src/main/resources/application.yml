@@ -1,5 +1,15 @@
 spring:
   profiles:
-    active: test
+    active: ${APP_PROFILE:test}
   jpa:
     open-in-view: false
+
+security:
+  oauth2:
+    client:
+      client-id: ${CLIENT_ID:clientid}
+      client-secret: ${CLIENT_SECRET:clientsecret}
+
+access_token:
+  secret: ${ACCESS_TOKEN_SECRET:mysecret}
+  duration: ${ACCESS_TOKEN_DURATION:600}
