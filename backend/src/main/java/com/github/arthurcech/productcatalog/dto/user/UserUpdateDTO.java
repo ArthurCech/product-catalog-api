@@ -1,5 +1,6 @@
 package com.github.arthurcech.productcatalog.dto.user;
 
+import com.github.arthurcech.productcatalog.validation.user.UserUpdateValid;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.Valid;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
+@UserUpdateValid
 public class UserUpdateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
