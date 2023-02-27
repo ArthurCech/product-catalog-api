@@ -1,47 +1,55 @@
 package com.github.arthurcech.productcatalog.dto.product;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.arthurcech.productcatalog.dto.category.CategoryResponse;
+import org.hibernate.validator.constraints.UniqueElements;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
-public class ProductResponse implements Serializable {
+public class ProductUpdateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final Long id;
+    @NotBlank
+    @Size(max = 255)
     private final String name;
+    @NotBlank
+    @Size(max = 255)
     private final String description;
+    @Positive
+    @NotNull
     private final BigDecimal price;
-    @JsonProperty("img_url")
+    @NotBlank
+    @Size(max = 255)
     private final String imgUrl;
+    @NotNull
     private final Instant date;
-    private final Set<CategoryResponse> categories;
+    @NotEmpty
+    @Valid
+    @UniqueElements
+    private final List<CategoryProductDTO> categories;
 
-    public ProductResponse(
-            Long id,
+    public ProductUpdateDTO(
             String name,
             String description,
             BigDecimal price,
             String imgUrl,
             Instant date,
-            Set<CategoryResponse> categories
+            List<CategoryProductDTO> categories
     ) {
-        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.imgUrl = imgUrl;
         this.date = date;
-        this.categories = categories == null ? new HashSet<>() : categories;
-    }
-
-    public Long getId() {
-        return id;
+        this.categories = categories;
     }
 
     public String getName() {
@@ -64,7 +72,7 @@ public class ProductResponse implements Serializable {
         return date;
     }
 
-    public Set<CategoryResponse> getCategories() {
+    public List<CategoryProductDTO> getCategories() {
         return categories;
     }
 

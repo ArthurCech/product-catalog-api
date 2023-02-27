@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @CategoryUpdateValid
-public class UpdateCategoryRequest implements Serializable {
+public class CategoryUpdateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,7 +17,7 @@ public class UpdateCategoryRequest implements Serializable {
     private final String name;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public UpdateCategoryRequest(String name) {
+    public CategoryUpdateDTO(String name) {
         this.name = name;
     }
 

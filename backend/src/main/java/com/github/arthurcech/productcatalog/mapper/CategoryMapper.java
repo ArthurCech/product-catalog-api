@@ -1,9 +1,9 @@
 package com.github.arthurcech.productcatalog.mapper;
 
 import com.github.arthurcech.productcatalog.domain.Category;
-import com.github.arthurcech.productcatalog.dto.category.CategoryResponse;
-import com.github.arthurcech.productcatalog.dto.category.CreateCategoryRequest;
-import com.github.arthurcech.productcatalog.dto.category.UpdateCategoryRequest;
+import com.github.arthurcech.productcatalog.dto.category.CategoryDTO;
+import com.github.arthurcech.productcatalog.dto.category.CategoryInsertDTO;
+import com.github.arthurcech.productcatalog.dto.category.CategoryUpdateDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
@@ -13,12 +13,12 @@ public interface CategoryMapper {
 
     CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
-    CategoryResponse toCategoryResponse(Category category);
+    CategoryDTO toCategoryDTO(Category category);
 
-    Category toCategory(CreateCategoryRequest createCategoryRequest);
+    Category toCategory(CategoryInsertDTO categoryInsertDTO);
 
     void updateCategoryFromDTO(
-            UpdateCategoryRequest updateCategoryRequest,
+            CategoryUpdateDTO categoryUpdateDTO,
             @MappingTarget Category category
     );
 

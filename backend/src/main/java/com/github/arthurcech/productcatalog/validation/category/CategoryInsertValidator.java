@@ -1,6 +1,6 @@
 package com.github.arthurcech.productcatalog.validation.category;
 
-import com.github.arthurcech.productcatalog.dto.category.CreateCategoryRequest;
+import com.github.arthurcech.productcatalog.dto.category.CategoryInsertDTO;
 import com.github.arthurcech.productcatalog.exception.FieldMessage;
 import com.github.arthurcech.productcatalog.repository.CategoryRepository;
 
@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryInsertValidator implements ConstraintValidator<CategoryInsertValid, CreateCategoryRequest> {
+public class CategoryInsertValidator implements ConstraintValidator<CategoryInsertValid, CategoryInsertDTO> {
 
     private final CategoryRepository categoryRepository;
 
@@ -23,11 +23,11 @@ public class CategoryInsertValidator implements ConstraintValidator<CategoryInse
 
     @Override
     public boolean isValid(
-            CreateCategoryRequest createCategoryRequest,
+            CategoryInsertDTO categoryInsertDTO,
             ConstraintValidatorContext context
     ) {
         List<FieldMessage> messages = new ArrayList<>();
-        categoryRepository.findByName(createCategoryRequest.getName())
+        categoryRepository.findByName(categoryInsertDTO.getName())
                 .ifPresent(category -> messages
                         .add(
                                 new FieldMessage("name", "Category already exists")

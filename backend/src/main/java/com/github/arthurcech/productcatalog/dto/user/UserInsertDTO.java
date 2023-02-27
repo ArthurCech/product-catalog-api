@@ -30,14 +30,14 @@ public class UserInsertDTO implements Serializable {
     @NotEmpty
     @Valid
     @UniqueElements
-    private final List<RoleUserInsertDTO> roles;
+    private final List<RoleUserDTO> roles;
 
     public UserInsertDTO(
             String firstName,
             String lastName,
             String email,
             String password,
-            List<RoleUserInsertDTO> roles
+            List<RoleUserDTO> roles
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -62,7 +62,7 @@ public class UserInsertDTO implements Serializable {
         return password;
     }
 
-    public List<RoleUserInsertDTO> getRoles() {
+    public List<RoleUserDTO> getRoles() {
         return roles;
     }
 

@@ -1,8 +1,8 @@
 package com.github.arthurcech.productcatalog.resource;
 
-import com.github.arthurcech.productcatalog.dto.product.CreateProductRequest;
-import com.github.arthurcech.productcatalog.dto.product.ProductResponse;
-import com.github.arthurcech.productcatalog.dto.product.UpdateProductRequest;
+import com.github.arthurcech.productcatalog.dto.product.ProductCreateDTO;
+import com.github.arthurcech.productcatalog.dto.product.ProductDTO;
+import com.github.arthurcech.productcatalog.dto.product.ProductUpdateDTO;
 import com.github.arthurcech.productcatalog.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,31 +31,31 @@ public class ProductResource {
     }
 
     @GetMapping
-    public Page<ProductResponse> findAll(Pageable pageable) {
+    public Page<ProductDTO> findAll(Pageable pageable) {
         return productService.findAll(pageable);
     }
 
     @GetMapping(value = "/{id}")
-    public ProductResponse findById(@PathVariable Long id) {
+    public ProductDTO findById(@PathVariable Long id) {
         return productService.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponse> create(
-            @RequestBody @Valid CreateProductRequest createProductRequest
+    public ResponseEntity<ProductDTO> create(
+            @RequestBody @Valid ProductCreateDTO productCreateDTO
     ) {
-        ProductResponse productResponse = productService.create(createProductRequest);
+        ProductDTO productDTO = productService.create(productCreateDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(productResponse.getId()).toUri();
-        return ResponseEntity.created(uri).body(productResponse);
+                .buildAndExpand(productDTO.getId()).toUri();
+        return ResponseEntity.created(uri).body(productDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public ProductResponse update(
+    public ProductDTO update(
             @PathVariable Long id,
-            @RequestBody @Valid UpdateProductRequest updateProductRequest
+            @RequestBody @Valid ProductUpdateDTO productUpdateDTO
     ) {
-        return productService.update(id, updateProductRequest);
+        return productService.update(id, productUpdateDTO);
     }
 
     @DeleteMapping(value = "/{id}")

@@ -1,4 +1,4 @@
-package com.github.arthurcech.productcatalog.dto.user;
+package com.github.arthurcech.productcatalog.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
@@ -7,7 +7,7 @@ import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class RoleUserInsertDTO implements Serializable {
+public class CategoryProductDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -16,7 +16,7 @@ public class RoleUserInsertDTO implements Serializable {
     private final Long id;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public RoleUserInsertDTO(Long id) {
+    public CategoryProductDTO(Long id) {
         this.id = id;
     }
 
@@ -28,7 +28,7 @@ public class RoleUserInsertDTO implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RoleUserInsertDTO that = (RoleUserInsertDTO) o;
+        CategoryProductDTO that = (CategoryProductDTO) o;
         return id.equals(that.id);
     }
 

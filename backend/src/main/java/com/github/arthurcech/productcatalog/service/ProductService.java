@@ -1,9 +1,9 @@
 package com.github.arthurcech.productcatalog.service;
 
 import com.github.arthurcech.productcatalog.domain.Product;
-import com.github.arthurcech.productcatalog.dto.product.CreateProductRequest;
-import com.github.arthurcech.productcatalog.dto.product.ProductResponse;
-import com.github.arthurcech.productcatalog.dto.product.UpdateProductRequest;
+import com.github.arthurcech.productcatalog.dto.product.ProductCreateDTO;
+import com.github.arthurcech.productcatalog.dto.product.ProductDTO;
+import com.github.arthurcech.productcatalog.dto.product.ProductUpdateDTO;
 import com.github.arthurcech.productcatalog.exception.DatabaseException;
 import com.github.arthurcech.productcatalog.exception.ResourceNotFoundException;
 import com.github.arthurcech.productcatalog.mapper.ProductMapper;
@@ -31,49 +31,47 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductResponse> findAll(Pageable pageable) {
+    public Page<ProductDTO> findAll(Pageable pageable) {
         return productRepository.findAll(pageable)
-                .map(ProductMapper.INSTANCE::toProductResponseBasic);
+                .map(ProductMapper.INSTANCE::toProductDTOBasic);
     }
 
     @Transactional(readOnly = true)
-    public ProductResponse findById(Long id) {
+    public ProductDTO findById(Long id) {
         return productRepository.findById(id)
-                .map(ProductMapper.INSTANCE::toProductResponseWithCategories)
+                .map(ProductMapper.INSTANCE::toProductDTOWithCategories)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @Transactional
-    public ProductResponse create(CreateProductRequest createProductRequest) {
+    public ProductDTO create(ProductCreateDTO productCreateDTO) {
         try {
-            Product product = ProductMapper.INSTANCE.toProduct(createProductRequest);
-            createProductRequest.getCategories()
-                    .forEach(category -> {
-                        product.addCategory(categoryRepository.getOne(category.getId()));
-                    });
+            Product product = ProductMapper.INSTANCE.toProduct(productCreateDTO);
+            productCreateDTO.getCategories().forEach(category -> {
+                product.addCategory(categoryRepository.getOne(category.getId()));
+            });
             productRepository.save(product);
-            return ProductMapper.INSTANCE.toProductResponseWithCategories(product);
+            return ProductMapper.INSTANCE.toProductDTOWithCategories(product);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Category not found");
         }
     }
 
     @Transactional
-    public ProductResponse update(
+    public ProductDTO update(
             Long id,
-            UpdateProductRequest updateProductRequest
+            ProductUpdateDTO productUpdateDTO
     ) {
         try {
             Product product = productRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-            ProductMapper.INSTANCE.updateProductFromDTO(updateProductRequest, product);
+            ProductMapper.INSTANCE.updateProductFromDTO(productUpdateDTO, product);
             product.getCategories().clear();
-            updateProductRequest.getCategories()
-                    .forEach(category -> {
-                        product.addCategory(categoryRepository.getOne(category.getId()));
-                    });
+            productUpdateDTO.getCategories().forEach(category -> {
+                product.addCategory(categoryRepository.getOne(category.getId()));
+            });
             productRepository.save(product);
-            return ProductMapper.INSTANCE.toProductResponseWithCategories(product);
+            return ProductMapper.INSTANCE.toProductDTOWithCategories(product);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Category not found");
         }

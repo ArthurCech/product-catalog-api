@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @CategoryInsertValid
-public class CreateCategoryRequest implements Serializable {
+public class CategoryInsertDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,7 +17,7 @@ public class CreateCategoryRequest implements Serializable {
     private final String name;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public CreateCategoryRequest(String name) {
+    public CategoryInsertDTO(String name) {
         this.name = name;
     }
 

@@ -1,9 +1,9 @@
 package com.github.arthurcech.productcatalog.service;
 
 import com.github.arthurcech.productcatalog.domain.Category;
-import com.github.arthurcech.productcatalog.dto.category.CategoryResponse;
-import com.github.arthurcech.productcatalog.dto.category.CreateCategoryRequest;
-import com.github.arthurcech.productcatalog.dto.category.UpdateCategoryRequest;
+import com.github.arthurcech.productcatalog.dto.category.CategoryDTO;
+import com.github.arthurcech.productcatalog.dto.category.CategoryInsertDTO;
+import com.github.arthurcech.productcatalog.dto.category.CategoryUpdateDTO;
 import com.github.arthurcech.productcatalog.exception.DatabaseException;
 import com.github.arthurcech.productcatalog.exception.ResourceNotFoundException;
 import com.github.arthurcech.productcatalog.mapper.CategoryMapper;
@@ -27,35 +27,35 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CategoryResponse> findAll(Pageable pageable) {
+    public Page<CategoryDTO> findAll(Pageable pageable) {
         return categoryRepository.findAll(pageable)
-                .map(CategoryMapper.INSTANCE::toCategoryResponse);
+                .map(CategoryMapper.INSTANCE::toCategoryDTO);
     }
 
     @Transactional(readOnly = true)
-    public CategoryResponse findById(Long id) {
+    public CategoryDTO findById(Long id) {
         return categoryRepository.findById(id)
-                .map(CategoryMapper.INSTANCE::toCategoryResponse)
+                .map(CategoryMapper.INSTANCE::toCategoryDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
     @Transactional
-    public CategoryResponse create(CreateCategoryRequest createCategoryRequest) {
-        Category category = CategoryMapper.INSTANCE.toCategory(createCategoryRequest);
+    public CategoryDTO create(CategoryInsertDTO categoryInsertDTO) {
+        Category category = CategoryMapper.INSTANCE.toCategory(categoryInsertDTO);
         categoryRepository.save(category);
-        return CategoryMapper.INSTANCE.toCategoryResponse(category);
+        return CategoryMapper.INSTANCE.toCategoryDTO(category);
     }
 
     @Transactional
-    public CategoryResponse update(
+    public CategoryDTO update(
             Long id,
-            UpdateCategoryRequest updateCategoryRequest
+            CategoryUpdateDTO categoryUpdateDTO
     ) {
         try {
             Category category = categoryRepository.getOne(id);
-            CategoryMapper.INSTANCE.updateCategoryFromDTO(updateCategoryRequest, category);
+            CategoryMapper.INSTANCE.updateCategoryFromDTO(categoryUpdateDTO, category);
             categoryRepository.save(category);
-            return CategoryMapper.INSTANCE.toCategoryResponse(category);
+            return CategoryMapper.INSTANCE.toCategoryDTO(category);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Category not found");
         }

@@ -1,53 +1,47 @@
 package com.github.arthurcech.productcatalog.dto.product;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.UniqueElements;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.arthurcech.productcatalog.dto.category.CategoryDTO;
 
-import javax.validation.Valid;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-public class UpdateProductRequest implements Serializable {
+@JsonPropertyOrder({"id", "name", "description", "price", "imgUrl", "date", "categories"})
+public class ProductDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotBlank
+    private final Long id;
     private final String name;
-    @NotBlank
     private final String description;
-    @DecimalMin("0.0")
-    @NotNull
     private final BigDecimal price;
-    @NotBlank
-    @JsonProperty("img_url")
     private final String imgUrl;
-    @NotNull
     private final Instant date;
-    @NotEmpty
-    @Valid
-    @UniqueElements
-    private final List<ProductCategoryRequest> categories;
+    private final Set<CategoryDTO> categories;
 
-    public UpdateProductRequest(
+    public ProductDTO(
+            Long id,
             String name,
             String description,
             BigDecimal price,
             String imgUrl,
             Instant date,
-            List<ProductCategoryRequest> categories
+            Set<CategoryDTO> categories
     ) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.imgUrl = imgUrl;
         this.date = date;
-        this.categories = categories;
+        this.categories = categories == null ? new HashSet<>() : categories;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
@@ -70,7 +64,7 @@ public class UpdateProductRequest implements Serializable {
         return date;
     }
 
-    public List<ProductCategoryRequest> getCategories() {
+    public Set<CategoryDTO> getCategories() {
         return categories;
     }
 

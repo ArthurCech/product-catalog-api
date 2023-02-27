@@ -1,46 +1,48 @@
 package com.github.arthurcech.productcatalog.dto.product;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.Valid;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
-public class CreateProductRequest implements Serializable {
+public class ProductCreateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @NotBlank
+    @Size(max = 255)
     private final String name;
     @NotBlank
+    @Size(max = 255)
     private final String description;
-    @DecimalMin("0.0")
+    @Positive
     @NotNull
     private final BigDecimal price;
     @NotBlank
-    @JsonProperty("img_url")
+    @Size(max = 255)
     private final String imgUrl;
     @NotNull
     private final Instant date;
     @NotEmpty
     @Valid
     @UniqueElements
-    private final List<ProductCategoryRequest> categories;
+    private final List<CategoryProductDTO> categories;
 
-    public CreateProductRequest(
+    public ProductCreateDTO(
             String name,
             String description,
             BigDecimal price,
             String imgUrl,
             Instant date,
-            List<ProductCategoryRequest> categories
+            List<CategoryProductDTO> categories
     ) {
         this.name = name;
         this.description = description;
@@ -70,7 +72,7 @@ public class CreateProductRequest implements Serializable {
         return date;
     }
 
-    public List<ProductCategoryRequest> getCategories() {
+    public List<CategoryProductDTO> getCategories() {
         return categories;
     }
 

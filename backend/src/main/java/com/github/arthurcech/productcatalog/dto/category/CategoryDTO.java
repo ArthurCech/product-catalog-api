@@ -1,15 +1,18 @@
 package com.github.arthurcech.productcatalog.dto.category;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import java.io.Serializable;
 
-public class CategoryResponse implements Serializable {
+@JsonPropertyOrder({"id", "name"})
+public class CategoryDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private final Long id;
     private final String name;
 
-    public CategoryResponse(
+    public CategoryDTO(
             Long id,
             String name
     ) {

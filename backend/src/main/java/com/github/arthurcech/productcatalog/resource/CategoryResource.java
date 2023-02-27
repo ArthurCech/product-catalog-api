@@ -1,8 +1,8 @@
 package com.github.arthurcech.productcatalog.resource;
 
-import com.github.arthurcech.productcatalog.dto.category.CategoryResponse;
-import com.github.arthurcech.productcatalog.dto.category.CreateCategoryRequest;
-import com.github.arthurcech.productcatalog.dto.category.UpdateCategoryRequest;
+import com.github.arthurcech.productcatalog.dto.category.CategoryDTO;
+import com.github.arthurcech.productcatalog.dto.category.CategoryInsertDTO;
+import com.github.arthurcech.productcatalog.dto.category.CategoryUpdateDTO;
 import com.github.arthurcech.productcatalog.service.CategoryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,31 +31,31 @@ public class CategoryResource {
     }
 
     @GetMapping
-    public Page<CategoryResponse> findAll(Pageable pageable) {
+    public Page<CategoryDTO> findAll(Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
     @GetMapping(value = "/{id}")
-    public CategoryResponse findById(@PathVariable Long id) {
+    public CategoryDTO findById(@PathVariable Long id) {
         return categoryService.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> create(
-            @RequestBody @Valid CreateCategoryRequest createCategoryRequest
+    public ResponseEntity<CategoryDTO> create(
+            @RequestBody @Valid CategoryInsertDTO categoryInsertDTO
     ) {
-        CategoryResponse categoryResponse = categoryService.create(createCategoryRequest);
+        CategoryDTO categoryDTO = categoryService.create(categoryInsertDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(categoryResponse.getId()).toUri();
-        return ResponseEntity.created(uri).body(categoryResponse);
+                .buildAndExpand(categoryDTO.getId()).toUri();
+        return ResponseEntity.created(uri).body(categoryDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public CategoryResponse update(
+    public CategoryDTO update(
             @PathVariable Long id,
-            @RequestBody @Valid UpdateCategoryRequest updateCategoryRequest
+            @RequestBody @Valid CategoryUpdateDTO categoryUpdateDTO
     ) {
-        return categoryService.update(id, updateCategoryRequest);
+        return categoryService.update(id, categoryUpdateDTO);
     }
 
     @DeleteMapping(value = "/{id}")

@@ -1,6 +1,6 @@
 package com.github.arthurcech.productcatalog.validation.category;
 
-import com.github.arthurcech.productcatalog.dto.category.UpdateCategoryRequest;
+import com.github.arthurcech.productcatalog.dto.category.CategoryUpdateDTO;
 import com.github.arthurcech.productcatalog.exception.FieldMessage;
 import com.github.arthurcech.productcatalog.repository.CategoryRepository;
 import org.springframework.web.servlet.HandlerMapping;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class CategoryUpdateValidator implements ConstraintValidator<CategoryUpdateValid, UpdateCategoryRequest> {
+public class CategoryUpdateValidator implements ConstraintValidator<CategoryUpdateValid, CategoryUpdateDTO> {
 
     private final HttpServletRequest request;
     private final CategoryRepository categoryRepository;
@@ -30,7 +30,7 @@ public class CategoryUpdateValidator implements ConstraintValidator<CategoryUpda
 
     @Override
     public boolean isValid(
-            UpdateCategoryRequest updateCategoryRequest,
+            CategoryUpdateDTO categoryUpdateDTO,
             ConstraintValidatorContext context
     ) {
         Map<String, String> uriVars = (Map<String, String>) request
@@ -38,7 +38,7 @@ public class CategoryUpdateValidator implements ConstraintValidator<CategoryUpda
         long categoryId = Long.parseLong(uriVars.get("id"));
 
         List<FieldMessage> messages = new ArrayList<>();
-        categoryRepository.findByName(updateCategoryRequest.getName())
+        categoryRepository.findByName(categoryUpdateDTO.getName())
                 .ifPresent(category -> {
                     if (categoryId != category.getId()) {
                         messages.add(new FieldMessage("name", "Category already exists"));
