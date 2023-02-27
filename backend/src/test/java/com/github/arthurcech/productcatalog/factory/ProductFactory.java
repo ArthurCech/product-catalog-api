@@ -1,9 +1,9 @@
 package com.github.arthurcech.productcatalog.factory;
 
 import com.github.arthurcech.productcatalog.domain.Product;
-import com.github.arthurcech.productcatalog.dto.product.CreateProductRequest;
-import com.github.arthurcech.productcatalog.dto.product.ProductCategoryRequest;
-import com.github.arthurcech.productcatalog.dto.product.UpdateProductRequest;
+import com.github.arthurcech.productcatalog.dto.product.ProductCreateDTO;
+import com.github.arthurcech.productcatalog.dto.product.CategoryProductDTO;
+import com.github.arthurcech.productcatalog.dto.product.ProductUpdateDTO;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -23,30 +23,30 @@ public class ProductFactory {
         return product;
     }
 
-    public static CreateProductRequest createProductRequest() {
+    public static ProductCreateDTO createProductRequest() {
         Product product = createProduct();
-        return new CreateProductRequest(
+        return new ProductCreateDTO(
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
                 product.getImgUrl(),
                 product.getDate(),
                 List.of(
-                        new ProductCategoryRequest(CategoryFactory.newCategory().getId())
+                        new CategoryProductDTO(CategoryFactory.newCategory().getId())
                 )
         );
     }
 
-    public static UpdateProductRequest updateProductRequest() {
+    public static ProductUpdateDTO updateProductRequest() {
         Product product = createProduct();
-        return new UpdateProductRequest(
+        return new ProductUpdateDTO(
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
                 product.getImgUrl(),
                 product.getDate(),
                 List.of(
-                        new ProductCategoryRequest(CategoryFactory.newCategory().getId())
+                        new CategoryProductDTO(CategoryFactory.newCategory().getId())
                 )
         );
     }

@@ -1,9 +1,9 @@
 package com.github.arthurcech.productcatalog.service;
 
 import com.github.arthurcech.productcatalog.domain.Category;
-import com.github.arthurcech.productcatalog.dto.category.CategoryResponse;
-import com.github.arthurcech.productcatalog.dto.category.CreateCategoryRequest;
-import com.github.arthurcech.productcatalog.dto.category.UpdateCategoryRequest;
+import com.github.arthurcech.productcatalog.dto.category.CategoryDTO;
+import com.github.arthurcech.productcatalog.dto.category.CategoryInsertDTO;
+import com.github.arthurcech.productcatalog.dto.category.CategoryUpdateDTO;
 import com.github.arthurcech.productcatalog.exception.DatabaseException;
 import com.github.arthurcech.productcatalog.exception.ResourceNotFoundException;
 import com.github.arthurcech.productcatalog.factory.CategoryFactory;
@@ -43,8 +43,8 @@ class CategoryServiceTest {
     private long nonExistingId;
     private long dependentId;
     private Category category;
-    private CreateCategoryRequest createCategoryRequest;
-    private UpdateCategoryRequest updateCategoryRequest;
+    private CategoryInsertDTO categoryInsertDTO;
+    private CategoryUpdateDTO categoryUpdateDTO;
     private PageImpl<Category> page;
 
     @BeforeEach
@@ -53,8 +53,8 @@ class CategoryServiceTest {
         nonExistingId = 2L;
         dependentId = 3L;
         category = CategoryFactory.newCategory();
-        createCategoryRequest = CategoryFactory.newCreateCategoryRequest();
-        updateCategoryRequest = CategoryFactory.newUpdateCategoryRequest();
+        categoryInsertDTO = CategoryFactory.newCreateCategoryRequest();
+        categoryUpdateDTO = CategoryFactory.newUpdateCategoryRequest();
         page = new PageImpl<>(List.of(category));
 
         Mockito.when(categoryRepository.findAll(ArgumentMatchers.any(Pageable.class))).thenReturn(page);
@@ -74,15 +74,15 @@ class CategoryServiceTest {
 
     @Test
     void saveShouldReturnCategoryResponseWhenCategoryIsCreated() {
-        CategoryResponse categoryResponse = categoryService.create(createCategoryRequest);
+        CategoryDTO categoryDTO = categoryService.create(categoryInsertDTO);
 
-        Assertions.assertNotNull(categoryResponse);
+        Assertions.assertNotNull(categoryDTO);
     }
 
     @Test
     void updateShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
         Assertions.assertThrows(ResourceNotFoundException.class, () -> {
-            categoryService.update(nonExistingId, updateCategoryRequest);
+            categoryService.update(nonExistingId, categoryUpdateDTO);
         });
 
         Mockito.verify(categoryRepository, times(1)).getOne(nonExistingId);
@@ -90,18 +90,18 @@ class CategoryServiceTest {
 
     @Test
     void updateShouldReturnCategoryResponseWhenIdExists() {
-        CategoryResponse categoryResponse = categoryService.update(existingId, updateCategoryRequest);
+        CategoryDTO categoryDTO = categoryService.update(existingId, categoryUpdateDTO);
 
-        Assertions.assertNotNull(categoryResponse);
+        Assertions.assertNotNull(categoryDTO);
 
         Mockito.verify(categoryRepository, times(1)).getOne(existingId);
     }
 
     @Test
     void findByIdShouldReturnCategoryResponseWhenIdExists() {
-        CategoryResponse categoryResponse = categoryService.findById(existingId);
+        CategoryDTO categoryDTO = categoryService.findById(existingId);
 
-        Assertions.assertNotNull(categoryResponse);
+        Assertions.assertNotNull(categoryDTO);
 
         Mockito.verify(categoryRepository, times(1)).findById(existingId);
     }
@@ -118,7 +118,7 @@ class CategoryServiceTest {
     @Test
     void findAllPagedShouldReturnPage() {
         Pageable pageable = PageRequest.of(0, 12);
-        Page<CategoryResponse> categoriesPage = categoryService.findAll(pageable);
+        Page<CategoryDTO> categoriesPage = categoryService.findAll(pageable);
 
         Assertions.assertTrue(categoriesPage.hasContent());
         Assertions.assertEquals(1L, categoriesPage.getTotalElements());

@@ -2,9 +2,9 @@ package com.github.arthurcech.productcatalog.service;
 
 import com.github.arthurcech.productcatalog.domain.Category;
 import com.github.arthurcech.productcatalog.domain.Product;
-import com.github.arthurcech.productcatalog.dto.product.CreateProductRequest;
-import com.github.arthurcech.productcatalog.dto.product.ProductResponse;
-import com.github.arthurcech.productcatalog.dto.product.UpdateProductRequest;
+import com.github.arthurcech.productcatalog.dto.product.ProductCreateDTO;
+import com.github.arthurcech.productcatalog.dto.product.ProductDTO;
+import com.github.arthurcech.productcatalog.dto.product.ProductUpdateDTO;
 import com.github.arthurcech.productcatalog.exception.DatabaseException;
 import com.github.arthurcech.productcatalog.exception.ResourceNotFoundException;
 import com.github.arthurcech.productcatalog.factory.CategoryFactory;
@@ -50,8 +50,8 @@ class ProductServiceTest {
     private long dependentId;
     private Product product;
     private Category category;
-    private CreateProductRequest createProductRequest;
-    private UpdateProductRequest updateProductRequest;
+    private ProductCreateDTO productCreateDTO;
+    private ProductUpdateDTO productUpdateDTO;
     private PageImpl<Product> page;
 
     @BeforeEach
@@ -61,8 +61,8 @@ class ProductServiceTest {
         dependentId = 3L;
         product = ProductFactory.createProduct();
         category = CategoryFactory.newCategory();
-        createProductRequest = ProductFactory.createProductRequest();
-        updateProductRequest = ProductFactory.updateProductRequest();
+        productCreateDTO = ProductFactory.createProductRequest();
+        productUpdateDTO = ProductFactory.updateProductRequest();
         page = new PageImpl<>(List.of(product));
 
         Mockito.when(productRepository.findAll(ArgumentMatchers.any(Pageable.class))).thenReturn(page);
@@ -82,15 +82,15 @@ class ProductServiceTest {
 
     @Test
     void saveShouldReturnProductResponseWhenCategoryIsCreated() {
-        ProductResponse productResponse = productService.create(createProductRequest);
+        ProductDTO productDTO = productService.create(productCreateDTO);
 
-        Assertions.assertNotNull(productResponse);
+        Assertions.assertNotNull(productDTO);
     }
 
     @Test
     void updateShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
         Assertions.assertThrows(ResourceNotFoundException.class, () -> {
-            productService.update(nonExistingId, updateProductRequest);
+            productService.update(nonExistingId, productUpdateDTO);
         });
 
         Mockito.verify(productRepository, times(1)).findById(nonExistingId);
@@ -98,18 +98,18 @@ class ProductServiceTest {
 
     @Test
     void updateShouldReturnProductResponseWhenIdExists() {
-        ProductResponse productResponse = productService.update(existingId, updateProductRequest);
+        ProductDTO productDTO = productService.update(existingId, productUpdateDTO);
 
-        Assertions.assertNotNull(productResponse);
+        Assertions.assertNotNull(productDTO);
 
         Mockito.verify(productRepository, times(1)).findById(existingId);
     }
 
     @Test
     void findByIdShouldReturnProductResponseWhenIdExists() {
-        ProductResponse productResponse = productService.findById(existingId);
+        ProductDTO productDTO = productService.findById(existingId);
 
-        Assertions.assertNotNull(productResponse);
+        Assertions.assertNotNull(productDTO);
 
         Mockito.verify(productRepository, times(1)).findById(existingId);
     }
@@ -126,7 +126,7 @@ class ProductServiceTest {
     @Test
     void findAllPagedShouldReturnPage() {
         Pageable pageable = PageRequest.of(0, 12);
-        Page<ProductResponse> page = productService.findAll(pageable);
+        Page<ProductDTO> page = productService.findAll(pageable);
 
         Assertions.assertNotNull(page);
         Assertions.assertEquals(1L, page.getTotalElements());
